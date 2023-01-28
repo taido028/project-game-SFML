@@ -3,11 +3,13 @@
 #include "Bullet.h"
 #include "Enemy.h"
 #include "Prize.h"
+#include "MainMenu.h"
 #include<iostream>
 #include<sstream>
 #include<map>
 #include<string>
 #include<numeric>
+#include<fstream>
 using namespace sf;
 using namespace std;
 class Game
@@ -15,7 +17,7 @@ class Game
 private:
 	//Window
 	RenderWindow* window;
-
+	
 	//Resources
 	map<string, Texture*> textures;
 	vector <Bullet*> bullets;
@@ -24,6 +26,8 @@ private:
 	Font font;
 	Text pointText;
 	Text GameOverText;
+	Text Return;
+	Text HighScore;
 
 	//Background
 	Sprite background;
@@ -32,6 +36,7 @@ private:
 	//System
 	unsigned points;
 	vector<float> totalpoints;
+	unsigned highscore;
 	
 
 	//Player
@@ -51,6 +56,7 @@ private:
 	float spawnPrizeTimerMax;
 	vector<Prize*> prizes;
 
+	void initMainMenu();
 	void initWindow();
 	void initTextures();
 	void initTexturesEnemies();
@@ -77,6 +83,7 @@ public:
 	void UpdateShooting();
 	void UpdateLevel();
 	void update();
+	void UpdateHS();
 	void renderGUI();
 	void renderBackground();
 	void render();

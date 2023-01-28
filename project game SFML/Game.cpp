@@ -6,7 +6,6 @@ void Game::initWindow()
 	this->window->setFramerateLimit(144);
 	this->window->setVerticalSyncEnabled(false);
 }
-
 void Game::initTextures()
 {
 	this->textures["BULLET"] = new Texture();
@@ -39,6 +38,19 @@ void Game::initGUI()
 	this->GameOverText.setPosition(this->window->getSize().x / 2.f - this->GameOverText.getGlobalBounds().width / 2.f,
 		this->window->getSize().y / 2.f - this->GameOverText.getGlobalBounds().height / 2.f);
 
+	this->Return.setFont(this->font);
+	this->Return.setCharacterSize(50);
+	this->Return.setFillColor(Color::Red);
+	this->Return.setString("Please press ESC to return");
+	this->Return.setPosition(this->window->getSize().x / 2.f- this->Return.getGlobalBounds().width / 2.f,
+		this->window->getSize().y / 3.f - this->Return.getGlobalBounds().height / 3.f );
+
+	this->HighScore.setFont(this->font);
+	this->HighScore.setCharacterSize(20);
+	this->HighScore.setFillColor(Color::Red);
+	this->HighScore.setString("Highest score: ");
+	this->HighScore.setPosition(0,35.f);
+
 	// init playerGUI
 	this->HpBar.setSize(Vector2f(250.f, 20.f));
 	this->HpBar.setFillColor(Color::Red);
@@ -57,6 +69,7 @@ void Game::initBackground()
 	this->background.setTexture(this->backgroundText);
 	
 }
+
 
 void Game::initSystems()
 {
@@ -93,6 +106,7 @@ Game::Game()
 	this->initPlayer();
 	this->initEnemies();
 	this->initPrizes();
+	
 }
 
 Game::~Game()
@@ -228,6 +242,7 @@ void Game::UpdateBullets()
 			// delete the bullet if out of the screen
 			delete this->bullets.at(count);
 			this->bullets.erase(this->bullets.begin() + count);
+			
 		}
 		++count;
 	}
@@ -347,7 +362,7 @@ void Game::UpdateLevel()
 		UpdateEnemies(0);
 	}
 	// level 2
-	else if(this->points>50 &&this->points<=350)
+	else if(this->points>50 && this->points<=350)
 	{
 		UpdateEnemies(0.5);
 	}
@@ -384,7 +399,36 @@ void Game::update()
 	this->UpdatePrizes();
 	this->UpdateShooting();
 	this->UpadteGUI();
+	this->UpdateHS();
 }
+// Update high score 
+void Game::UpdateHS()
+{
+	ifstream readFile;
+	string hs;
+	readFile.open("Highscore.txt");
+	if (readFile.is_open())
+	{
+		while (!readFile.eof())
+		{
+			readFile >> highscore;
+		}
+	}
+	readFile.close();
+
+	ofstream writeFile("Highscore.txt");
+	if (writeFile.is_open())
+	{
+		if (this->points > highscore)
+		{
+			highscore = this->points;
+		}
+		writeFile << highscore;
+	}
+	writeFile.close();
+	
+}
+
 
 void Game::renderGUI()
 {
@@ -398,6 +442,7 @@ void Game::renderBackground()
 	this->window->draw(this->background);
 	
 }
+
 
 void Game::render()
 {
@@ -423,7 +468,18 @@ void Game::render()
 	if (this->player->getHp() <= 0)
 	{
 		this->window->draw(this->GameOverText);
+		this->window->draw(this->Return);
+		ifstream file;
+		file.open("Highscore.txt");
+		string hs;
+		while (!file.eof())
+		{
+			file >> hs;
+		}
+		stringstream s;
+		s << " Highest score: " << hs;
+		this->HighScore.setString(s.str());
+		this->window->draw(this->HighScore);
 	}
-	
 	this->window->display();
 }
