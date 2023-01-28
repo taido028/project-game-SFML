@@ -64,7 +64,7 @@ int main()
 				}
 				if (event.key.code == Keyboard::Return)
 				{
-					RenderWindow OPTIONS(VideoMode(800, 600), "OPTIONS");
+					RenderWindow INSTRUCTION(VideoMode(800, 600), "OPTIONS");
 					RenderWindow HIGHSCORE(VideoMode(800, 600), "HIGH SCORE");
 					int x = mainMenu.MainMenuPressed();
 					if (x == 0)
@@ -72,7 +72,7 @@ int main()
 						srand(time(0));
 						Game game;
 						game.run();
-						OPTIONS.close();
+						INSTRUCTION.close();
 						HIGHSCORE.close();
 					}
 					if (x == 1)
@@ -117,7 +117,7 @@ int main()
 									}
 								}
 							}
-							OPTIONS.close();
+							INSTRUCTION.close();
 							HIGHSCORE.clear();
 							HIGHSCORE.draw(HighScoreBackground);
 							HIGHSCORE.draw(HighScoreText);
@@ -127,27 +127,27 @@ int main()
 					}
 					if (x == 2)
 					{
-						while (OPTIONS.isOpen())
+						while (INSTRUCTION.isOpen())
 						{
 							Event event;
-							while (OPTIONS.pollEvent(event))
+							while (INSTRUCTION.pollEvent(event))
 							{
 								if (event.type == Event::Closed)
 								{
-									OPTIONS.close();
+									INSTRUCTION.close();
 								}
 								if (event.type == Event::KeyPressed)
 								{
 									if (event.key.code == Keyboard::Escape)
 									{
-										OPTIONS.close();
+										INSTRUCTION.close();
 									}
 								}
 							}
 							HIGHSCORE.close();
-							OPTIONS.clear();
-							OPTIONS.draw(InsBackground);
-							OPTIONS.display();
+							INSTRUCTION.clear();
+							INSTRUCTION.draw(InsBackground);
+							INSTRUCTION.display();
 						}
 					}
 					if (x == 3)
